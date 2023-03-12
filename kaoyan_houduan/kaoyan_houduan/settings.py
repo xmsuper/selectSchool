@@ -37,22 +37,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',  ##配置跨域
     'showSchool',
     'rest_framework',
-    'corsheaders' ##配置跨域
 ]
 
 # 配置ajax跨域
-# CORS_ALLOW_ALL_ORIGINS=TRUE
-CORS_ORIGIN_WHITELIST=(
-    ['http://127.0.0.1:8080']
-)
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_ALL_ORIGINS=True
 CORS_ALLOW_HEADERS=["*"]
+# CORS_ORIGIN_WHITELIST=['http://127.0.0.1:8080']
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', #注意在common的上方，官方建议
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # 注意在common的上方，官方建议
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

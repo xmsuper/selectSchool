@@ -1,14 +1,14 @@
 <template>
-  <indexSchool></indexSchool>
+
   <RouterView></RouterView>
 </template>
 
 <script>
-import indexSchool from './views/indexSchool.vue';
+import home from '@/views/home.vue'
 import { defineComponent } from 'vue';
 export default defineComponent({
   name:'App',
-  components:{indexSchool},
+  components:{home},
   setup() {
 
 
@@ -20,4 +20,4 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
