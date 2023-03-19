@@ -8,6 +8,25 @@
 from django.db import models
 
 
+class ApptestAuthor(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'apptest_author'
+
+
+class ApptestBook(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    title = models.CharField(max_length=100)
+    author = models.ForeignKey(ApptestAuthor, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'apptest_book'
+
+
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -124,18 +143,29 @@ class DjangoSession(models.Model):
 
 class Feature(models.Model):
     name = models.CharField(unique=True, max_length=10, blank=True, null=True)
-    code = models.CharField(unique=True, max_length=20, blank=True, null=True)
+    code = models.CharField(primary_key=True,unique=True, max_length=20, blank=True)
     type = models.CharField(max_length=10, blank=True, null=True)
+    feature_id = models.IntegerField()
 
     class Meta:
         managed = False
         db_table = 'feature'
 
 
-class ProvinceA(models.Model):
+class Province(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=10)
     type = models.CharField(max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'province'
+
+
+class ProvinceA(models.Model):
+    code = models.TextField(primary_key=True,blank=True)
+    name = models.TextField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -143,7 +173,7 @@ class ProvinceA(models.Model):
 
 
 class ProvinceB(models.Model):
-    code = models.CharField(max_length=10, blank=True, null=True)
+    code = models.CharField(primary_key=True,max_length=10, blank=True)
     name = models.CharField(max_length=10, blank=True, null=True)
     type = models.CharField(max_length=20, blank=True, null=True)
 
@@ -153,7 +183,7 @@ class ProvinceB(models.Model):
 
 
 class ProvinceOther(models.Model):
-    code = models.CharField(max_length=10, blank=True, null=True)
+    code = models.CharField(primary_key=True,max_length=10, blank=True)
     name = models.CharField(max_length=10, blank=True, null=True)
     type = models.CharField(max_length=20, blank=True, null=True)
 
@@ -177,7 +207,7 @@ class SchoolInfo(models.Model):
     type_school_name = models.CharField(max_length=50)
     province_area = models.CharField(max_length=10)
     syl = models.IntegerField(blank=True, null=True)
-    school_name = models.OneToOneField(SchoolImg, models.DO_NOTHING, db_column='school_name')
+    school_name = models.ForeignKey(SchoolImg, models.DO_NOTHING, db_column='school_name')
     clicks = models.IntegerField(blank=True, null=True)
     is_985 = models.IntegerField(blank=True, null=True)
     is_zihuaxian = models.IntegerField(blank=True, null=True)
@@ -215,7 +245,22 @@ class SchoolType(models.Model):
     name = models.CharField(unique=True, max_length=10)
     code = models.CharField(unique=True, max_length=10)
     type = models.CharField(max_length=20, blank=True, null=True)
+    type_id = models.IntegerField(primary_key=True)
 
     class Meta:
         managed = False
         db_table = 'school_type'
+
+class hotSchoolSearch(models.Model):
+    school_id=models.CharField(primary_key=True,null=False,max_length=20)
+    school_name=models.ForeignKey(SchoolImg, max_length=50,on_delete=models.CASCADE)
+    class Meta:
+        managed=True
+        db_table='hotSearchSchool'
+class userInfo(models.Model):
+    username=models.CharField(max_length=50,unique=True)
+    userPassword=models.CharField(max_length=80)
+    class Meta:
+        managed=True
+        db_table='userInfo'
+

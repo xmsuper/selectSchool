@@ -15,10 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include,re_path
-from showSchool.views import allSchool
+
+from showSchool import views
+from showSchool.views import allSchool,allSchoolType,province_a,province_b,province_other,allFeature,hotSchool,Register,Login
 from django.urls import path
 urlpatterns = [
     path('admin/',admin.site.urls),
-    path('allSchool/',allSchool.as_view())
+    path('allSchool/',allSchool.as_view()),
+    # path('test/',views.test),
+    # path('allSchool2/', views.allSchool2)
+    path('allSchoolType/',allSchoolType.as_view()),
+    path('province_a/',province_a.as_view()),
+    path('province_b/', province_b.as_view()),
+    path('province_other/', province_other.as_view()),
+    path('allFeature/', allFeature.as_view()),
+    path('hotSchool/',hotSchool.as_view()),
+    path('Resgiter',Register.as_view()),
+    path('Login', Login.as_view())
+
 ]
 

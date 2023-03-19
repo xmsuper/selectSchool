@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from django.shortcuts import render,HttpResponse
 # Feature
 # ProvinceA
@@ -14,32 +15,108 @@ from rest_framework import serializers
 from rest_framework.views import APIView
 # 以json的格式返回给页面
 from rest_framework.response import Response
-from showSchool.models import Feature,ProvinceA,ProvinceB,ProvinceOther,SchoolInfo,SchoolType,SchoolScore
+# from showSchool.models import Feature,ProvinceA,ProvinceB,ProvinceOther,SchoolInfo,SchoolType,SchoolScore,SchoolImg
+from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo
 
-# 构建序列化器
-class allSchoolSerializers(serializers.ModelSerializer):
+class allimgSer(serializers.ModelSerializer):
+    class Meta:
+        model=SchoolImg
+        fields='__all__'
+class allschoolInfoSer(serializers.ModelSerializer):
+
+    school_name=allimgSer()
     class Meta:
         model=SchoolInfo
         fields='__all__'
-class school_img(serializers.ModelSerializer):
-    class Meta:
-        # model=school_img
-        fields='__all__'
 
-class SchoolPageination(PageNumberPagination):
-    # 每页展示条数
-    page_size = 10
-    # 查询页码参数  ？page=10
-    # page_query_param = 'p'
-    # 每页条数参数
-    page_size_query_param = 'size'
-    # 表示每页最大显示数量，做限制使用，避免突然大量的查询数据
-    max_page_size = 20
 class allSchool(ListCreateAPIView):
     # 指定查询集
-    queryset =SchoolInfo.objects.all()
+    queryset = SchoolInfo.objects.all()
     # 指定序列化器
-    serializer_class=allSchoolSerializers
-    # 设置分页s
-    # pagination_class = SchoolPageination
-    # 'select a.school_name,b.school_img from school_info a left join school_img b on a.school_name=b.school_name'
+    serializer_class=allschoolInfoSer
+
+class schoolTypeSer(serializers.ModelSerializer):
+    class Meta:
+        model=SchoolType
+        fields='__all__'
+
+class allSchoolType(ListCreateAPIView):
+    queryset = SchoolType.objects.all()
+    serializer_class = schoolTypeSer
+
+class province_bSer(serializers.ModelSerializer):
+    class Meta:
+        model=ProvinceB
+        fields='__all__'
+
+class province_b(ListCreateAPIView):
+    queryset = ProvinceB.objects.all()
+    serializer_class = province_bSer
+class province_otherSer(serializers.ModelSerializer):
+    class Meta:
+        model=ProvinceOther
+        fields='__all__'
+
+class province_other(ListCreateAPIView):
+    queryset = ProvinceOther.objects.all()
+    serializer_class = province_otherSer
+class province_aSer(serializers.ModelSerializer):
+    class Meta:
+        model=ProvinceA
+        fields='__all__'
+
+class province_a(ListCreateAPIView):
+    queryset = ProvinceA.objects.all()
+    serializer_class = province_aSer
+
+class featureSer(serializers.ModelSerializer):
+    class Meta:
+        model=Feature
+        fields='__all__'
+
+class allFeature(ListCreateAPIView):
+    queryset = Feature.objects.all()
+    serializer_class = featureSer
+
+# 热搜院校
+class hotSchool(serializers.ModelSerializer):
+    school_name=allimgSer()
+    class Meta:
+        model=hotSchoolSearch
+        fields='__all__'
+class hotSchool(ListCreateAPIView):
+    queryset = hotSchoolSearch.objects.all()
+    serializer_class = hotSchool
+
+class RegisterSer(serializers.ModelSerializer):
+    class Meta:
+        model=userInfo
+        fields='__all__'
+class Register(APIView):
+    # def get(self,request,id):
+
+    def post(self,request):
+        # print(request.data)
+        serializer=RegisterSer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            print('同名账户以存在')
+            return Response(serializer.errors)
+class LoginSer(serializers.ModelSerializer):
+    class Meta:
+        model=userInfo
+        fields='__all__'
+class Login(APIView):
+    def post(self,request):
+        print(request.data)
+        serializer=RegisterSer(data=request.data)
+        if serializer.is_valid():
+
+            # serializer.save()
+            return Response(serializer.data)
+        else:
+            print('同名账户以存在')
+            return Response(serializer.errors)
+
