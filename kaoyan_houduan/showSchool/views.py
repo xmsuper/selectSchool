@@ -110,13 +110,11 @@ class LoginSer(serializers.ModelSerializer):
         fields='__all__'
 class Login(APIView):
     def post(self,request):
-        print(request.data)
-        serializer=RegisterSer(data=request.data)
-        if serializer.is_valid():
-
-            # serializer.save()
-            return Response(serializer.data)
-        else:
-            print('同名账户以存在')
-            return Response(serializer.errors)
-
+        # print((request.data))
+        obj=request.data['params']
+        print(obj)
+        # username=obj['username']
+        # password=obj['password']
+        # serializer=RegisterSer(data=request.data)
+        # if serializer.is_valid():
+        return Response({'content':'成功'})

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',  ##配置跨域
     'showSchool',
     'rest_framework',
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
 ]
 
 # 配置ajax跨域
@@ -113,7 +114,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+  ),
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
