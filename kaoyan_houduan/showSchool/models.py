@@ -6,7 +6,22 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
+"""
+django内置的user对象，已经包含了一些主要的属性，如username,password,email等，实际使用可能还需要昵称等其他属性
+通过AbstractUser可以进行扩展使用，添加用户自定义的属性
+model中
+from django.contrib.auth.models import AbstractUser
+class MyUser(AbstractUser):
+    pass
+    
+全局settings.py中配置，默认覆盖的user model
+AUTH_USER_MODEL = 'app.MyUser'
+
+"""
+# class MyUser(AbstractUser):
+#     phone=models.CharField(verbose_name='s手机号',max_length=11,null=True,unique=True)
 
 class ApptestAuthor(models.Model):
     id = models.BigAutoField(primary_key=True)

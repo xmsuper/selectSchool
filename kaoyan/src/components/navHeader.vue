@@ -10,7 +10,8 @@
                 <el-input v-model="input" class="w-10 m-5" placeholder="查专业" :suffix-icon="Search" />
             </el-col>
             <el-col :span="8">
-                <el-button style="margin-left: 50px;" type="danger" @click="LoginAlert = true">登录/注册</el-button>
+                <el-button v-if="!isLogin" style="margin-left: 50px;" type="danger" @click="LoginAlert = true">登录/注册</el-button>
+                <el-button v-else style="margin-left: 50px;" type="danger" @click="LoginAlert = true">欢迎您，尊贵的xxxx</el-button>
             </el-col>
         </el-row>
 
@@ -87,6 +88,8 @@ import type from 'element-plus'
 import requestFn from '@/api/requestFn.js'
 import {ref, reactive, onMounted } from 'vue';
 import { Search } from '@element-plus/icons-vue'
+import store from '@/store';
+const isLogin=store.state.isLogin
 let curID = ref(0)
 const input = ref('')
 const ruleFormRef=ref()
@@ -102,7 +105,6 @@ const ruleForm2=reactive({
 })
 // 登录
 const submitForm=(e)=>{
-    console.log(e.username,e.password)
     requestFn({
         url:'/Login',
         method:'post',
@@ -111,7 +113,13 @@ const submitForm=(e)=>{
             password:e.password
         }
     }).then(data=>{
-        console.log(data)
+        console.log(data.data.content)
+        if(data.data.code==200){
+            // store.state.isLogin
+            store.commit('setLogin',true)
+            console.log(store.state.isLogin)
+        }
+
     }).catch(erro=>{
         console.log(erro)
     })

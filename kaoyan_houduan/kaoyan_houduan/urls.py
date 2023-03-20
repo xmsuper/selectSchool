@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path,include,re_path
 
 from showSchool import views
+from django.contrib import admin
 from showSchool.views import allSchool,allSchoolType,province_a,province_b,province_other,allFeature,hotSchool,Register,Login
 from django.urls import path
+
 urlpatterns = [
     path('admin/',admin.site.urls),
     path('allSchool/',allSchool.as_view()),
@@ -32,6 +34,7 @@ urlpatterns = [
     path('hotSchool/',hotSchool.as_view()),
     path('Resgiter',Register.as_view()),
     path('Login', Login.as_view())
+
 
 ]
 

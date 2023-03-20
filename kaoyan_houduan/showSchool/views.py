@@ -17,7 +17,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 # from showSchool.models import Feature,ProvinceA,ProvinceB,ProvinceOther,SchoolInfo,SchoolType,SchoolScore,SchoolImg
 from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo
-
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
 class allimgSer(serializers.ModelSerializer):
     class Meta:
         model=SchoolImg
@@ -108,13 +109,16 @@ class LoginSer(serializers.ModelSerializer):
     class Meta:
         model=userInfo
         fields='__all__'
-class Login(APIView):
+class Login(GenericAPIView):
+    serializer_class = LoginSer
     def post(self,request):
         # print((request.data))
         obj=request.data['params']
-        print(obj)
-        # username=obj['username']
-        # password=obj['password']
-        # serializer=RegisterSer(data=request.data)
-        # if serializer.is_valid():
-        return Response({'content':'成功'})
+        username=obj['username']
+        password=obj['password']
+        result=userInfo.objects.filter(username=username,userPassword=password)
+        if len(result)>0:
+            return Response({'content':'成功','code':200})
+        else:
+            return Response({'content':'登录失败','code':'400'})
+
