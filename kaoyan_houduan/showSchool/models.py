@@ -156,6 +156,7 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+
 class Feature(models.Model):
     name = models.CharField(unique=True, max_length=10, blank=True, null=True)
     code = models.CharField(primary_key=True,unique=True, max_length=20, blank=True)
@@ -279,3 +280,28 @@ class userInfo(models.Model):
         managed=True
         db_table='userInfo'
 
+
+class school_detail(models.Model):
+    school_id = models.IntegerField(primary_key=True,null=False)
+    belongsTo=models.CharField(max_length=50)
+    create_date=models.IntegerField()
+    intro=models.TextField()
+    num_doctor=models.IntegerField()
+    num_lab=models.IntegerField()
+    num_master=models.IntegerField()
+    num_subject=models.IntegerField()
+    school_space=models.CharField(max_length=50)
+    class Meta:
+        managed=True
+        db_table='school_detail'
+
+class major(models.Model):
+    major_name=models.CharField(max_length=50)
+    major_code=models.CharField(max_length=50)
+    major_class=models.CharField(max_length=10)
+    level1_name=models.CharField(max_length=50)
+    level2_name=models.CharField(max_length=50)
+    spe_id=models.IntegerField(primary_key=True)
+    class Meta:
+        managed=True
+        db_table='major'

@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import requestFn from '@/api/requestFn'
+import createPersistedState from 'vuex-persistedstate'
 
 const getAndCommit=async (url,mutationName,commit,method)=>{
     const {data}=await requestFn({url:url,method:method})
@@ -29,6 +30,11 @@ const store=createStore({
     }
   },
   modules: {
-  }
+  },
+  // 执行持久化登录插件
+  plugins:[createPersistedState({
+    storage:window.sessionStorage,
+    paths:['isLogin']
+  })]
 })
 export default store

@@ -1,17 +1,21 @@
 <template>
     <div class="demo-input-size">
         <el-row :gutter="24">
-            <el-col :span="8">
+            <el-col :span="4">
                 <RouterLink to="/">
                     <img style="width: 116px;height: 35px;margin-left: 50px;" src="../../public/下载.png" alt="">
                 </RouterLink>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="5">
+                <!-- <span>距离2023考研 倒计时40天</span> -->
+                <van-count-down :time="time" format="DD 天 HH 时 mm 分 ss 秒" />
+            </el-col>
+            <el-col :span="9">
                 <el-input v-model="input" class="w-10 m-5" placeholder="查专业" :suffix-icon="Search" />
             </el-col>
-            <el-col :span="8">
-                <el-button v-if="!isLogin" style="margin-left: 50px;" type="danger" @click="LoginAlert = true">登录/注册</el-button>
-                <el-button v-else style="margin-left: 50px;" type="danger" @click="LoginAlert = true">欢迎您，尊贵的xxxx</el-button>
+            <el-col :span="6">
+                <el-button v-if="!isLogin"  style="margin-left: 50px;" type="danger" @click="LoginAlertFn">登录/注册</el-button>
+                <el-button v-else  style="margin-left: 50px;" type="danger">欢迎您，同学xxxx</el-button>
             </el-col>
         </el-row>
 
@@ -86,14 +90,18 @@
 <script setup>
 import type from 'element-plus'
 import requestFn from '@/api/requestFn.js'
-import {ref, reactive, onMounted } from 'vue';
+import {ref, reactive, onMounted,getCurrentInstance,computed} from 'vue';
 import { Search } from '@element-plus/icons-vue'
+import {useRoute,useRouter} from 'vue-router'
 import store from '@/store';
-const isLogin=store.state.isLogin
+const router=useRouter()
+const isLogin=computed(()=>store.state.isLogin)
 let curID = ref(0)
 const input = ref('')
 const ruleFormRef=ref()
 const LoginAlert = ref(false)
+const {proxy}=getCurrentInstance()
+// console.log(proxy)
 const ruleForm = reactive({
     username:'',
     password:''
@@ -103,6 +111,9 @@ const ruleForm2=reactive({
     password:'',
     password2:''
 })
+const LoginAlertFn=()=>{
+    LoginAlert.value=true
+}
 // 登录
 const submitForm=(e)=>{
     requestFn({
@@ -116,8 +127,11 @@ const submitForm=(e)=>{
         console.log(data.data.content)
         if(data.data.code==200){
             // store.state.isLogin
+            console.log(store.state.isLogin)
             store.commit('setLogin',true)
             console.log(store.state.isLogin)
+            LoginAlert.value=false
+            router.push('/')
         }
 
     }).catch(erro=>{
@@ -151,6 +165,11 @@ const resetForm = (formEl) => {
   formEl.resetFields()
 }
 
+let cur_time=new Date().getTime()
+let fina_time=new Date('2023/12/24')
+let diff=Math.abs(cur_time-fina_time.getTime())
+console.log(diff)
+const time=ref(diff)
 </script>
 
 <style lang="less" scoped>
@@ -186,8 +205,10 @@ const resetForm = (formEl) => {
 }
 
 .demo-input-size {
-    margin-top: 50px;
-
+    width: 1200px;
+    // margin-top: 50px;
+    margin:50px auto;
+    // background-color: red;
     .el-row {
         &:nth-of-type(1) {}
     }
@@ -220,5 +241,10 @@ const resetForm = (formEl) => {
 
 .dialog-footer button:first-child {
     margin-right: 10px;
+}
+.van-count-down{
+    color: red;
+    font-size: 16px;
+    font-weight: 900;
 }
 </style>

@@ -16,7 +16,7 @@ from rest_framework.views import APIView
 # 以json的格式返回给页面
 from rest_framework.response import Response
 # from showSchool.models import Feature,ProvinceA,ProvinceB,ProvinceOther,SchoolInfo,SchoolType,SchoolScore,SchoolImg
-from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo
+from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo,major
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 class allimgSer(serializers.ModelSerializer):
@@ -122,3 +122,21 @@ class Login(GenericAPIView):
         else:
             return Response({'content':'登录失败','code':'400'})
 
+class pm_ser(serializers.ModelSerializer):
+    class Meta:
+        model=major
+        fields=['level1_name']
+class pm_class(APIView):
+    def get(self,request):
+        pm_class=major.objects.filter(major_class='专业型硕士').values('level1_name').distinct()
+        serialer=pm_ser(instance=pm_class,many=True)
+        return Response(serialer.data)
+class am_ser(serializers.ModelSerializer):
+    class Meta:
+        model=major
+        fields=['level1_name']
+class am_class(APIView):
+    def get(self,request):
+        pm_class=major.objects.filter(major_class='学术型硕士').values('level1_name').distinct()
+        serialer=pm_ser(instance=pm_class,many=True)
+        return Response(serialer.data)
