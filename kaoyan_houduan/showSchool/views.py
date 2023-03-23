@@ -122,6 +122,11 @@ class Login(GenericAPIView):
         else:
             return Response({'content':'登录失败','code':'400'})
 
+<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
+=======
+
+# 获取专业型硕士的门类
+>>>>>>> 3/23 23:44:00
 class pm_ser(serializers.ModelSerializer):
     class Meta:
         model=major
@@ -140,3 +145,25 @@ class am_class(APIView):
         pm_class=major.objects.filter(major_class='学术型硕士').values('level1_name').distinct()
         serialer=pm_ser(instance=pm_class,many=True)
         return Response(serialer.data)
+<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
+=======
+
+
+class two_class_ser(serializers.ModelSerializer):
+    class Meta:
+        model = major
+        fields = ['major_class']
+
+class showTwoClass(APIView):
+    def get(self, request):
+        two_class=major.objects.values('major_class').distinct()
+        serializer=two_class_ser(instance=two_class,many=True)
+        return Response(serializer.data)
+
+
+class subject_class(APIView):
+    def post(self,request):
+        obj=request.data['params']
+        print(obj['level1_name'])
+
+>>>>>>> 3/23 23:44:00

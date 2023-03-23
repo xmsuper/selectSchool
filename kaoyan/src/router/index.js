@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from '@/App.vue'
 import home from '@/views/home.vue'
 import indexSchoolVue from '@/views/indexSchool.vue'
+<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
+=======
+import major_list from '@/views/major_list'
+>>>>>>> 3/23 23:44:00
 const routes = [
   // {
   //   path:'/index',
@@ -17,7 +21,16 @@ const routes = [
     path:'/',
     name:indexSchoolVue,
     component:indexSchoolVue
+<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
   }
+=======
+  },
+  {
+    path:'/major_list',
+    name:major_list,
+    component:major_list
+  },
+>>>>>>> 3/23 23:44:00
   // {
   //   path: '/about',
   //   name: 'about',
