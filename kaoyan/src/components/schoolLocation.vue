@@ -21,21 +21,21 @@
           <el-row :gutter="24">
             <el-col :span="4">A区</el-col>
             <el-col :span="20">
-              <span class="final_span" v-for="i of province_a.arr">{{ i.name }}</span>
+              <span @click="Abtn(v.name,k)" class="final_span" v-for="(v,k) of province_a.arr">{{ v.name }}</span>
             </el-col>
           </el-row>
           <!-- B区 -->
           <el-row :gutter="24">
             <el-col :span="4">B区</el-col>
             <el-col :span="20">
-              <span class="final_span" v-for="i of province_b.arr">{{ i.name }}</span>
+              <span @click="Bbtn(v.name,k)" class="final_span" v-for="(v,k) of province_b.arr">{{ v.name }}</span>
             </el-col>
           </el-row>
           <!-- 其他 -->
           <el-row :gutter="24">
             <el-col :span="4">其他</el-col>
             <el-col :span="20">
-              <span class="final_span"  v-for="i of province_other.arr">{{ i.name }}</span>
+              <span @click="otherBtn(v.name,k)" class="final_span"  v-for="(v,k) of province_other.arr">{{ v.name }}</span>
             </el-col>
           </el-row>
         </el-col>
@@ -61,7 +61,7 @@
           </div>
         </el-col>
         <el-col :span="18">
-          <span class="final_span" v-for=" i of allSchoolType.arr" :key="i.code">{{ i.name }}</span>
+          <span @click="typeBtn(v.name,k)" class="final_span" v-for="(v,k) of allSchoolType.arr" :key="v.code">{{ v.name }}</span>
         </el-col>
       </el-row>
     </div>
@@ -86,7 +86,7 @@
           </div>
         </el-col>
         <el-col :span="18">
-          <span class="final_span" v-for="i of feature.arr">{{ i.name }}</span>
+          <span class="final_span" @click="tsBtn(v.name,k)" v-for="(v,k) of feature.arr">{{ v.name }}</span>
         </el-col>
       </el-row>
     </div>
@@ -94,19 +94,23 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, DefineComponent} from 'vue';
-import { ref, onMounted, reactive, watch } from "vue"
+<script setup>
+import { ref, onMounted, reactive, watch,onUpdated } from "vue"
 import requestFn from '@/api/requestFn.js'
-import { all } from 'axios';
-export default defineComponent({
-    name:'schoolLocation',
-    setup(){
       const allSchoolType=reactive({arr:[]})
       const province_a=reactive({arr:[]})
       const province_b=reactive({arr:[]})
       const province_other=reactive({arr:[]})
       const feature=reactive({arr:[]})
+
+      const school_addition=reactive({
+        Location:'',
+        SchoolType:'',
+        SchoolTs:'',
+      })
+      watch(school_addition,(newVal,oldVal)=>{
+        console.log(newVal.Location,newVal.SchoolTs,newVal.SchoolType)
+      })
       onMounted(()=>{
         requestFn({
           url:'allSchoolType',
@@ -146,12 +150,26 @@ export default defineComponent({
 
 
       })
-
-      return{
-        allSchoolType,province_a,province_b,province_other,feature
+      const Abtn=(v,k)=>{
+        console.log(v,k)
+        school_addition.Location=v
       }
-    }
-})
+      const Bbtn=(v,k)=>{
+        console.log(v,k)
+        school_addition.Location=v
+
+      }
+      const otherBtn=(v,k)=>{
+        console.log(v,k)
+        school_addition.Location=v
+      }
+      const typeBtn=(v,k)=>{
+        console.log(v,k)
+      }
+      const tsBtn=(v,k)=>{
+        console.log(v,k)
+      }
+
 </script>
 
 <style lang="less" scoped>

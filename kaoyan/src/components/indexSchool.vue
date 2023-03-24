@@ -53,7 +53,6 @@
 <script>
 import { ref, onMounted, reactive, watch } from "vue"
 import requestFn from '@/api/requestFn.js'
-import { on } from "events"
 import { slice } from "lodash"
 export default {
     name: 'home',

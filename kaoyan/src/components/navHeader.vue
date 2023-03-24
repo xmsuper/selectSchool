@@ -24,11 +24,7 @@
                 <div>AI择校</div>
             </el-col>
             <el-col :span="6">
-<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
-                <div>查专业</div>
-=======
                 <div><RouterLink to="/major_list">查专业</RouterLink></div>
->>>>>>> 3/23 23:44:00
             </el-col>
             <el-col :span="6">
                 <div>
@@ -128,11 +124,7 @@ const submitForm=(e)=>{
             password:e.password
         }
     }).then(data=>{
-<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
-        console.log(data.data.content)
-=======
         // console.log(data.data.content)
->>>>>>> 3/23 23:44:00
         if(data.data.code==200){
             // store.state.isLogin
             console.log(store.state.isLogin)
@@ -176,11 +168,7 @@ const resetForm = (formEl) => {
 let cur_time=new Date().getTime()
 let fina_time=new Date('2023/12/24')
 let diff=Math.abs(cur_time-fina_time.getTime())
-<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
-console.log(diff)
-=======
 // console.log(diff)
->>>>>>> 3/23 23:44:00
 const time=ref(diff)
 </script>
 

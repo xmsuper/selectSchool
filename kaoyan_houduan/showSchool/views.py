@@ -122,11 +122,8 @@ class Login(GenericAPIView):
         else:
             return Response({'content':'登录失败','code':'400'})
 
-<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
-=======
 
 # 获取专业型硕士的门类
->>>>>>> 3/23 23:44:00
 class pm_ser(serializers.ModelSerializer):
     class Meta:
         model=major
@@ -145,9 +142,6 @@ class am_class(APIView):
         pm_class=major.objects.filter(major_class='学术型硕士').values('level1_name').distinct()
         serialer=pm_ser(instance=pm_class,many=True)
         return Response(serialer.data)
-<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
-=======
-
 
 class two_class_ser(serializers.ModelSerializer):
     class Meta:
@@ -160,10 +154,54 @@ class showTwoClass(APIView):
         serializer=two_class_ser(instance=two_class,many=True)
         return Response(serializer.data)
 
-
+class majorList_ser(serializers.ModelSerializer):
+    class Meta:
+        model=major
+        fields=['level2_name']
 class subject_class(APIView):
     def post(self,request):
         obj=request.data['params']
-        print(obj['level1_name'])
+        match len(obj):
+            case 2:
+                major_list=major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name']).values('level2_name').distinct()
+                serializer=majorList_ser(instance=major_list,many=True)
+                return Response(serializer.data)
+        return Response()
 
->>>>>>> 3/23 23:44:00
+# 查专业
+class detail_major(serializers.ModelSerializer):
+    class Meta:
+        model=major
+        fields='__all__'
+class detail_major_list(APIView):
+    def get(self,request):
+        major_list = major.objects.all()
+        serializer = detail_major(instance=major_list, many=True)
+        return Response(serializer.data)
+    def post(self,request):
+        obj=request.data['params']
+        print(type(obj))
+        match len(obj):
+            case 3:
+                major_list=major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name']).filter(level2_name=obj['level2_name'])
+                serializer=detail_major(instance=major_list,many=True)
+                return Response(serializer.data)
+            case 2:
+                major_list=major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name'])
+                serializer=detail_major(instance=major_list,many=True)
+                return Response(serializer.data)
+            case 1:
+                if 'twoClass' in obj:
+                    print(obj['twoClass'])
+                    major_list = major.objects.filter(major_class=obj['twoClass']).distinct()
+                    serializer = detail_major(instance=major_list, many=True)
+                    return Response(serializer.data)
+                if 'level1_name' in obj:
+                    print(obj['level1_name'])
+                    major_list = major.objects.filter(level1_name=obj['level1_name'])
+                    serializer = detail_major(instance=major_list, many=True)
+                    return Response(serializer.data)
+
+        return Response({'code':'200'})
+
+

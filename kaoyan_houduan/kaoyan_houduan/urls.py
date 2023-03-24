@@ -18,12 +18,8 @@ from django.urls import path,include,re_path
 
 from showSchool import views
 from django.contrib import admin
-<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
-from showSchool.views import allSchool,allSchoolType,province_a,province_b,province_other,allFeature,hotSchool,Register,Login,pm_class,am_class
-=======
 from showSchool.views import allSchool,allSchoolType,province_a,province_b,province_other\
-    ,allFeature,hotSchool,Register,Login,pm_class,am_class,showTwoClass,subject_class
->>>>>>> 3/23 23:44:00
+    ,allFeature,hotSchool,Register,Login,pm_class,am_class,showTwoClass,subject_class,detail_major_list
 from django.urls import path
 
 urlpatterns = [
@@ -38,16 +34,12 @@ urlpatterns = [
     path('allFeature/', allFeature.as_view()),
     path('hotSchool/',hotSchool.as_view()),
     path('Resgiter/',Register.as_view()),
-    path('Login/', Login.as_view()),
+    path('Login', Login.as_view()),
     path('pm_class/',pm_class.as_view()),
-<<<<<<< 5ad04df23f3db778e1451b5fe78b8212bc6a732a
-    path('am_class/',am_class.as_view())
-=======
     path('am_class/',am_class.as_view()),
     path('showTwoClass/',showTwoClass.as_view()),
-    path('subject_class/',subject_class.as_view()),
-
->>>>>>> 3/23 23:44:00
+    path('subject_class',subject_class.as_view()),
+    path('detail_major_list',detail_major_list.as_view())
 
 ]
 
