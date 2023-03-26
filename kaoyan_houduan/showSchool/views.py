@@ -19,6 +19,7 @@ from rest_framework.response import Response
 from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo,major
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from django.db.models import Q
 class allimgSer(serializers.ModelSerializer):
     class Meta:
         model=SchoolImg
@@ -29,7 +30,32 @@ class allschoolInfoSer(serializers.ModelSerializer):
     class Meta:
         model=SchoolInfo
         fields='__all__'
+class searchSchoolser(serializers.ModelSerializer):
+    class Meta:
+        model=SchoolInfo
+        fields='__all__'
 
+# 搜索院校信息
+class searchResult(APIView):
+    def post(self,request):
+        obj=request.data['params']['keyword']
+        print(obj)
+        sql=SchoolInfo.objects.filter(school_name=obj['keyword'])
+        serializer=searchSchoolser(instance=sql,many=True)
+        return Response(serializer.data)
+# 搜索专业信息
+class majorList(serializers.ModelSerializer):
+    class Meta:
+        model=major
+        fields='__all__'
+class searchMajor(APIView):
+    def post(self,request):
+        obj=request.data['params']['keyword']
+        sql=major.objects.filter(major_name__icontains=obj['keyword'])
+        serializer=majorList(instance=sql,many=True)
+        return Response(serializer.data)
+
+# 查询所有院校信息
 class allSchool(ListCreateAPIView):
     # 指定查询集
     queryset = SchoolInfo.objects.all()
@@ -180,7 +206,6 @@ class detail_major_list(APIView):
         return Response(serializer.data)
     def post(self,request):
         obj=request.data['params']
-        print(type(obj))
         match len(obj):
             case 3:
                 major_list=major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name']).filter(level2_name=obj['level2_name'])
@@ -201,7 +226,96 @@ class detail_major_list(APIView):
                     major_list = major.objects.filter(level1_name=obj['level1_name'])
                     serializer = detail_major(instance=major_list, many=True)
                     return Response(serializer.data)
-
         return Response({'code':'200'})
 
-
+# 查院校
+class detail_school_ser(serializers.ModelSerializer):
+    school_name = allimgSer()
+    class Meta:
+        model=SchoolInfo
+        fields='__all__'
+class detail_school_list(APIView):
+    def post(self,request):
+        obj=request.data['params']
+        school_data=obj['data']
+        print(school_data)
+        match len(school_data):
+            case 3:
+                if school_data['SchoolTs']=='高等院校'or'科研院所':
+                    detail_school_sql=SchoolInfo.objects.filter(province_name=school_data['Location']).filter(type_name=school_data['SchoolType']).filter(type_school_name=school_data['SchoolTs'])
+                elif school_data['SchoolTs']=='985':
+                    detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(
+                        type_name=school_data['SchoolType']).filter(is_985=1)
+                elif school_data['SchoolTs']=='211':
+                    detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(
+                        type_name=school_data['SchoolType']).filter(is_211=1)
+                elif school_data['SchoolTs']=='双一流':
+                    detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(
+                        type_name=school_data['SchoolType']).filter(syl=1)
+                else:
+                    detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(
+                        type_name=school_data['SchoolType']).filter(is_zihuaxian=1)
+                serializer=detail_school_ser(instance=detail_school_sql,many=True)
+                return Response(serializer.data)
+            case 2:
+                if 'SchoolTs'in school_data and 'Location' in school_data:
+                    print('类型和地址')
+                    match school_data['SchoolTs']:
+                        case '高等院校'|'科研院所':
+                            detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(type_school_name=school_data['SchoolTs'])
+                        case '985':
+                            detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(is_985=1)
+                        case '211':
+                            detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(is_211=1)
+                        case '双一流':
+                            detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(syl=1)
+                        case '自划线':
+                            detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(is_zihuaxian=1)
+                    serializer = detail_school_ser(instance=detail_school_sql, many=True)
+                    return Response(serializer.data)
+                if 'SchoolTs'in school_data and 'SchoolType' in school_data:
+                    match school_data['SchoolTs']:
+                        case '高等院校' | '科研院所':
+                            detail_school_sql = SchoolInfo.objects.filter(type_school_name=school_data['SchoolTs']).filter(type_name=school_data['SchoolType'])
+                        case '985':
+                            detail_school_sql = SchoolInfo.objects.filter(is_985=1).filter(
+                                type_name=school_data['SchoolType'])
+                        case '211':
+                            detail_school_sql = SchoolInfo.objects.filter(is_211=1).filter(
+                                type_name=school_data['SchoolType'])
+                        case '双一流':
+                            detail_school_sql = SchoolInfo.objects.filter(syl=1).filter(
+                                type_name=school_data['SchoolType'])
+                        case '自划线':
+                            detail_school_sql = SchoolInfo.objects.filter(is_zihuaxian=1).filter(type_name=school_data['schoolType'])
+                    serializer = detail_school_ser(instance=detail_school_sql, many=True)
+                    return Response(serializer.data)
+                if 'SchoolType' in school_data and 'Location' in school_data :
+                    detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location']).filter(type_name=school_data['SchoolType'])
+                    serializer = detail_school_ser(instance=detail_school_sql, many=True)
+                    return Response(serializer.data)
+            case 1:
+                if 'Location' in school_data:
+                    detail_school_sql = SchoolInfo.objects.filter(province_name=school_data['Location'])
+                    serializer = detail_school_ser(instance=detail_school_sql, many=True)
+                    return Response(serializer.data)
+                if 'SchoolType' in school_data:
+                    detail_school_sql = SchoolInfo.objects.filter(type_name=school_data['SchoolType'])
+                    serializer = detail_school_ser(instance=detail_school_sql, many=True)
+                    return Response(serializer.data)
+                if 'SchoolTs' in school_data:
+                        match school_data['SchoolTs']:
+                            case '高等院校'|'科研院所':
+                                detail_school_sql = SchoolInfo.objects.filter(type_school_name=school_data['SchoolTs'])
+                            case '985':
+                                detail_school_sql = SchoolInfo.objects.filter(is_985=1)
+                            case '211':
+                                detail_school_sql = SchoolInfo.objects.filter(is_211=1)
+                            case '双一流':
+                                print('syl')
+                                detail_school_sql = SchoolInfo.objects.filter(syl=1)
+                            case '自划线':
+                                detail_school_sql = SchoolInfo.objects.filter(is_zihuaxian=1)
+                        serializer = detail_school_ser(instance=detail_school_sql, many=True)
+                        return Response(serializer.data)
+        return Response({'error':'错误'})

@@ -3,6 +3,7 @@ import App from '@/App.vue'
 import home from '@/views/home.vue'
 import indexSchoolVue from '@/views/indexSchool.vue'
 import major_list from '@/views/major_list'
+import searchResult from '@/views/searchResult.vue'
 const routes = [
   // {
   //   path:'/index',
@@ -13,6 +14,11 @@ const routes = [
     path:'/home',
     name:home,
     component:home
+  },
+  {
+    path:'/searchResult',
+    name:searchResult,
+    component:searchResult
   },
   {
     path:'/',

@@ -1,4 +1,5 @@
 <template>
+    <div>{{ chooseCondition }}</div>
     <!-- 轮播图 -->
     <el-carousel :interval="4000" type="card" height="200px">
     <el-carousel-item v-for="i of slogan.arr">
@@ -48,18 +49,21 @@
 
   </div>
 
-
 </template>
 
 <script setup>
-import { ref,reactive,onMounted,watch} from 'vue';
+import { ref,reactive,onMounted,watch,toRaw} from 'vue';
+
+
 const slogan=reactive({arr:[
     'https://news.ycwb.com/pic/2019-11/23/f0ef853a-eb59-4d19-ad1e-5d9b68f99755.jpg',
     'https://p1.itc.cn/q_70/images03/20211222/9d8ce62e045f43abb5eaf5b3d918919f.png',
     'https://pic2.zhimg.com/v2-b75713850547f70b6fb9473878592421_r.jpg',
     'https://cdn2.kybimg.com/forum/201302/17/133227n7dx8yha5wi5wxww.jpg'
 ]})
+onMounted(()=>{
 
+})
 
 </script>
 

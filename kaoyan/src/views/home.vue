@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <div class="container">
-      <schoolLocation></schoolLocation>
-      <indexSchool></indexSchool>
+      <schoolLocation @getSchoolCondition="getSchoolValue"></schoolLocation>
+      <indexSchool :chooseCondition="chooseCondition"></indexSchool>
     </div>
     <div class="hotSearch">
       <hotSearch></hotSearch>
@@ -10,25 +10,27 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, DefineComponent,onMounted} from 'vue';
+<script setup>
+import { watch, toRaw, onMounted, reactive, ref } from 'vue';
 import schoolLocation from '@/components/schoolLocation.vue'
 import indexSchool from '@/components/indexSchool.vue'
 import hotSearch from '@/components/hotSearch.vue'
 import store from '@/store'
-export default defineComponent({
-  components: { indexSchool, schoolLocation,hotSearch },
-  setup() {
-    onMounted(() => {
-      // store.dispatch('showAllSchool')
-    })
-
-    return {
-
-    }
-
-  }
+const chooseCondition = reactive({
+  Location: '',
+  SchoolType: '',
+  SchoolTs: ''
 })
+const getSchoolValue = (value) => {
+    chooseCondition.Location = toRaw(value).Location
+    chooseCondition.SchoolType = toRaw(value).SchoolType
+    chooseCondition.SchoolTs = toRaw(value).SchoolTs
+}
+watch(chooseCondition,()=>{
+  console.log(chooseCondition)
+})
+
+
 </script>
 
 <style scoped>

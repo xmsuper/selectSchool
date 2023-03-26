@@ -11,7 +11,7 @@
                 <van-count-down :time="time" format="DD 天 HH 时 mm 分 ss 秒" />
             </el-col>
             <el-col :span="9">
-                <el-input v-model="input" class="w-10 m-5" placeholder="查专业" :suffix-icon="Search" />
+                <el-input v-model="input" class="w-10 m-5" placeholder="查专业" :suffix-icon="Search"  @keydown="beginSearch"/>
             </el-col>
             <el-col :span="6">
                 <el-button v-if="!isLogin"  style="margin-left: 50px;" type="danger" @click="LoginAlertFn">登录/注册</el-button>
@@ -48,7 +48,7 @@
                     <el-form ref="ruleFormRef" :model="ruleForm" status-icon  label-width="120px"
                         class="demo-ruleForm">
                         <el-form-item label="用户名" prop="pass">
-                            <el-input v-model="ruleForm.username"  type="text" autocomplete="off" />
+                            <el-input v-model="ruleForm.username"  type="text" autocomplete="off" @keydown.enter.native="search" />
                         </el-form-item>
                         <el-form-item label="密码" prop="checkPass">
                             <el-input v-model="ruleForm.password" type="password" autocomplete="off" />
@@ -88,9 +88,8 @@
 </template>
 
 <script setup>
-import type from 'element-plus'
 import requestFn from '@/api/requestFn.js'
-import {ref, reactive, onMounted,getCurrentInstance,computed} from 'vue';
+import {ref, reactive, onMounted,getCurrentInstance,computed,watch} from 'vue';
 import { Search } from '@element-plus/icons-vue'
 import {useRoute,useRouter} from 'vue-router'
 import store from '@/store';
@@ -101,6 +100,23 @@ const input = ref('')
 const ruleFormRef=ref()
 const LoginAlert = ref(false)
 const {proxy}=getCurrentInstance()
+const emit=defineEmits(['getKeyWord'])
+const beginSearch=(event)=>{
+    // console.log(event.keyCode)
+    if(event.keyCode==13){
+        router.push({
+            path:'/searchResult',
+            query:{
+                keyword:input.value
+            }
+        })
+        input.value=''
+    }
+}
+
+// watch(input,(newVal,oldVal)=>{
+//     console.log(newVal,oldVal)
+// })
 // console.log(proxy)
 const ruleForm = reactive({
     username:'',
@@ -209,6 +225,7 @@ const time=ref(diff)
     // margin-top: 50px;
     margin:50px auto;
     // background-color: red;
+    border-bottom: 1px solid #eee;
     .el-row {
         &:nth-of-type(1) {}
     }
@@ -217,7 +234,7 @@ const time=ref(diff)
         &:nth-of-type(2) {
             margin: 30px 0;
             // background-color: red;
-            padding: 20px 100px;
+            padding: 0px 80px;
 
             .el-col {
 

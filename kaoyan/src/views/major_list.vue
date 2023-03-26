@@ -9,8 +9,8 @@
                             d="M660.2496 485.1456L385.1776 210.0992a18.048 18.048 0 0 0-25.5488 0c-7.0656 7.0656-7.0656 18.5088 0 25.5488L634.7008 510.72c0.3328 0.3328 0.3328 0.8448 0 1.1776l-276.48 276.4544a18.048 18.048 0 0 0 0 25.5488 17.98656 17.98656 0 0 0 12.7744 5.2992c4.6336 0 9.2416-1.7664 12.7744-5.2992L660.224 537.4464c14.4384-14.4128 14.4384-37.888 0.0256-52.3008z"
                             fill="#231815" p-id="2791"></path>
                     </svg></el-col>
-                <el-col :span="2" @click="all_majorFn">全部</el-col>
-                <el-col :span="18"><span @click="two_major(k.major_class, v)" v-for="(k, v) of twoClass.arr">{{
+                <el-col :span="2" @click="all_majorFn" :class="allbtn==true?'active':''">全部</el-col>
+                <el-col :span="18"><span @click="two_major(k.major_class, v)" :class="isActive==v?'active':''" v-for="(k, v) of twoClass.arr">{{
                     k.major_class
                 }}</span></el-col>
             </el-row>
@@ -25,7 +25,7 @@
                 <el-col :span="2"></el-col>
                 <el-col :span="18">
                     <!-- 点击门类，显示专业具体名字 -->
-                    <span @click="speBtn(k.level1_name, v)" v-for="(k, v) of level1_name.arr">{{ k.level1_name
+                    <span @click="speBtn(k.level1_name, v)" :class="isActive1==v?'active':''" v-for="(k, v) of level1_name.arr">{{ k.level1_name
                     }}</span>
                 </el-col>
             </el-row>
@@ -39,7 +39,7 @@
                     </svg></el-col>
                 <el-col :span="2"></el-col>
                 <el-col :span="18">
-                    <span v-for="(v, k) of level2_name.arr" @click="majorNameBtn(v.level2_name, k)">{{ v.level2_name
+                    <span v-for="(v, k) of level2_name.arr" :class="isActive2==k?'active':''" @click="majorNameBtn(v.level2_name, k)">{{ v.level2_name
                     }}</span>
                 </el-col>
             </el-row>
@@ -70,10 +70,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, nextTick } from "vue"
+import { ref, reactive, onMounted, nextTick,watch} from "vue"
 import requestFn from "@/api/requestFn";
 import hotSearch from "@/components/hotSearch.vue";
-
+const allbtn=ref(true)
 const twoClass = reactive({ arr: [] })
 const level1_name = reactive({ arr: [] })
 const level2_name = reactive({ arr: [] })
@@ -122,7 +122,12 @@ onMounted(() => {
     // 获取全部的专业-结束
 
 })
+// 获取所有专业列表
 const all_majorFn = () => {
+    allbtn.value=true
+    isActive.value=-1
+    isActive1.value=-1
+    isActive2.value=-1
     requestFn({
         url: '/detail_major_list',
         method: 'get'
@@ -131,8 +136,14 @@ const all_majorFn = () => {
     })
 }
 
+const isActive=ref(null)
+const isActive1=ref(null)
+const isActive2=ref(null)
+
 // 专业型硕士筛选-开始
 const two_major = (k, v) => {
+    allbtn.value=false
+    isActive.value=v
     showClass.value = false
     // 可以优化的点
     for (let j in passList) {
@@ -167,7 +178,7 @@ const two_major = (k, v) => {
             level1_name.arr = data.data
             nextTick(() => {
                 passList.two_class = k
-                console.log(passList)
+                // console.log(passList)
                 requestFn({
                     url: '/detail_major_list',
                     method: 'post',
@@ -187,6 +198,9 @@ const two_major = (k, v) => {
 
 // level1_name-开始
 const speBtn = (k, v) => {
+    allbtn.value=false
+    isActive1.value=v
+    isActive2.value=-1
     showClass.value = true
     nextTick(() => {
         passList.level1_name = k
@@ -220,9 +234,11 @@ const speBtn = (k, v) => {
 
 // 专业筛选--开始
 const majorNameBtn = (v, k) => {
+    allbtn.value=false
+    isActive2.value=k
     nextTick(() => {
         passList.level2_name = v
-        console.log(passList)
+        // console.log(passList)
         requestFn({
             url: '/detail_major_list',
             method: 'post',
@@ -246,6 +262,9 @@ const majorNameBtn = (v, k) => {
 </script>
 
 <style scoped>
+.active{
+    color:#ff6602;
+}
 .el-pagination.is-background .el-pager li.is-active {
     background-color: red;
 }
