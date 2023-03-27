@@ -1,5 +1,4 @@
 <template>
-    <div>{{ chooseCondition }}</div>
     <!-- 轮播图 -->
     <el-carousel :interval="4000" type="card" height="200px">
     <el-carousel-item v-for="i of slogan.arr">

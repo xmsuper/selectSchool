@@ -100,7 +100,7 @@ const input = ref('')
 const ruleFormRef=ref()
 const LoginAlert = ref(false)
 const {proxy}=getCurrentInstance()
-const emit=defineEmits(['getKeyWord'])
+// const Search=Search()
 const beginSearch=(event)=>{
     // console.log(event.keyCode)
     if(event.keyCode==13){

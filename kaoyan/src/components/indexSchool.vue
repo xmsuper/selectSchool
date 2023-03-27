@@ -8,7 +8,7 @@
                         <img style="width: 60px;height: 60px;" :src="n.school_name.school_img">
                     </div>
                 </el-col>
-                <el-col :span="14">
+                <el-col :span="14" @click="gotoDetail(n.school_id)">
                     <div>
                         <div class="school_list_item_content">
                             <span>{{ n.school_name.school_name }}</span>
@@ -53,7 +53,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch, toRaw, toRefs } from "vue"
 import requestFn from '@/api/requestFn.js'
-import { slice } from "lodash"
+import {useRoute,useRouter} from 'vue-router'
 // 接收父组件传递过来的数据 ---开始  
 const props = defineProps({
     chooseCondition: {
@@ -122,6 +122,18 @@ watch(props.chooseCondition, () => {
         console.log(error)
     })
 })
+
+const router=useRouter()
+// 路由带参跳转
+const gotoDetail=(e)=>{
+    router.push({
+        // path:'/schoolDetail/'+e,
+        name:'schoolDetail',
+        params:{
+            school_id:e,
+        }
+    })
+}
 
 </script>
 

@@ -16,7 +16,9 @@ from rest_framework.views import APIView
 # 以json的格式返回给页面
 from rest_framework.response import Response
 # from showSchool.models import Feature,ProvinceA,ProvinceB,ProvinceOther,SchoolInfo,SchoolType,SchoolScore,SchoolImg
-from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo,major
+from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,\
+    Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo,major\
+    ,school_detail
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.db.models import Q
@@ -40,8 +42,9 @@ class searchResult(APIView):
     def post(self,request):
         obj=request.data['params']['keyword']
         print(obj)
-        sql=SchoolInfo.objects.filter(school_name=obj['keyword'])
-        serializer=searchSchoolser(instance=sql,many=True)
+        # 外键模糊查询，需要后面在跟一个school_name__school_name__icontains=''
+        sql=SchoolInfo.objects.filter(school_name__school_name__icontains=obj['keyword'])
+        serializer=allschoolInfoSer(instance=sql,many=True)
         return Response(serializer.data)
 # 搜索专业信息
 class majorList(serializers.ModelSerializer):
@@ -319,3 +322,15 @@ class detail_school_list(APIView):
                         serializer = detail_school_ser(instance=detail_school_sql, many=True)
                         return Response(serializer.data)
         return Response({'error':'错误'})
+
+class singleSchoolInfo_ser(serializers.ModelSerializer):
+    class Meta:
+        model=school_detail
+        fields='__all__'
+class singSchoolInfo(APIView):
+    def post(self,request):
+        data=request.data['params']['school_id']
+        print(data)
+        sql=school_detail.objects.filter(school_id=data)
+        serializer=singleSchoolInfo_ser(instance=sql,many=True)
+        return Response(serializer.data)

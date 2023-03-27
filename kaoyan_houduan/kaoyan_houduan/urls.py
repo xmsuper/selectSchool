@@ -20,7 +20,7 @@ from showSchool import views
 from django.contrib import admin
 from showSchool.views import allSchool,allSchoolType,province_a,province_b,province_other\
     ,allFeature,hotSchool,Register,Login,pm_class,am_class,showTwoClass,\
-    subject_class,detail_major_list,detail_school_list,searchResult,searchMajor
+    subject_class,detail_major_list,detail_school_list,searchResult,searchMajor,singSchoolInfo
 from django.urls import path
 
 urlpatterns = [
@@ -44,6 +44,7 @@ urlpatterns = [
     path('detail_school_list',detail_school_list.as_view()),
     path('searchResult',searchResult.as_view()),
     path('searchMajor',searchMajor.as_view()),
+    path('singSchoolInfo',singSchoolInfo.as_view()),
 
 ]
 

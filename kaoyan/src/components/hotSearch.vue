@@ -16,35 +16,30 @@
     </label>
     <div class="hotSearchItem">
         <ul>
-            <li v-for="(i,index) of hotSearch.arr">
-                <span>{{ index+1 }}</span>
+            <li v-for="(i, index) of hotSearch.arr">
+                <span>{{ index + 1 }}</span>
                 <img :src=i.school_name.school_img>
                 <div>
-                    <span>{{i.school_name.school_name}}</span>
+                    <span>{{ i.school_name.school_name }}</span>
                 </div>
             </li>
         </ul>
     </div>
 </template>
 
-<script>
-import { defineComponent, DefineComponent,onMounted,ref,reactive } from 'vue';
+<script setup>
+import { onMounted, ref, reactive } from 'vue';
 import requestFn from '@/api/requestFn.js'
-export default defineComponent({
-setup(){
-    const hotSearch=reactive({arr:[]})
-    requestFn({
-        url:'hotSchool',
-        method:'get'
-    }).then(data=>{
-        hotSearch.arr=data.data
-    })
-
-    return{
-        hotSearch
-    }
-  }
+const hotSearch = reactive({ arr: [] })
+requestFn({
+    url: 'hotSchool',
+    method: 'get'
+}).then(data => {
+    hotSearch.arr = data.data
 })
+
+
+
 </script>
 
 <style lang="less" scoped>
@@ -118,4 +113,5 @@ label {
             }
         }
     }
-}</style>
+}
+</style>

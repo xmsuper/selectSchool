@@ -1,1 +1,3 @@
 https://static.kaoyan.cn/json/school/5/depart/11450/special/75/specialInfo.json  招生人数信息
+
+https://static.kaoyan.cn/json/school/459/info.json 大学详细信息
