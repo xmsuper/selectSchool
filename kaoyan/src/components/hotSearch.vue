@@ -16,7 +16,7 @@
     </label>
     <div class="hotSearchItem">
         <ul>
-            <li v-for="(i, index) of hotSearch.arr">
+            <li v-for="(i, index) of hotSearch.arr" @click="toDetail(i.school_id)">
                 <span>{{ index + 1 }}</span>
                 <img :src=i.school_name.school_img>
                 <div>
@@ -30,15 +30,27 @@
 <script setup>
 import { onMounted, ref, reactive } from 'vue';
 import requestFn from '@/api/requestFn.js'
+import {useRoute,useRouter} from 'vue-router'
 const hotSearch = reactive({ arr: [] })
 requestFn({
     url: 'hotSchool',
     method: 'get'
 }).then(data => {
+    // console.log(data.data)
     hotSearch.arr = data.data
 })
+const router=useRouter()
 
-
+const toDetail=(e)=>{
+// 路由带参跳转
+    router.push({
+        // path:'/schoolDetail/'+e,
+        name:'schoolDetail',
+        params:{
+            school_id:e,
+        }
+    })
+}
 
 </script>
 

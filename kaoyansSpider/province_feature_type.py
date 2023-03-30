@@ -33,7 +33,7 @@ def province_A(data):
     list=province_id['A']
     for province_a in list:
         province_a.update({"type":"province_a"})
-        # save_sql(province_a)
+        save_sql(province_a)
 def province_B(data):
     province_id=data['province_id']
     list=province_id['B']
@@ -65,7 +65,7 @@ if __name__=='__main__':
     requests=create_request()
     content=get_content(requests)
     province_A(content)
-    province_B(content)
-    province_Other(content)
-    feature(content)
-    type(content)
+    # province_B(content)
+    # province_Other(content)
+    # feature(content)
+    # type(content)

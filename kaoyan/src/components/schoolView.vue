@@ -2,12 +2,12 @@
     <div class="container" v-for="(v,k) of school_info.arr">
         <div class="intro">
             <el-row :gutter="300">
-                <el-col :span="8">
-                    <img src="https://static-data.eol.cn/upload/svideo/1591237744_8048_thumb.png" alt="">
+                <el-col  v-if="v.school_img=='https://static-data.eol.cn'?false:true"  :span="8">
+                    <img :src=v.school_img>
                 </el-col>
-                <el-col :span="16">
+                <el-col :span="v.school_img=='https://static-data.eol.cn'?24:16">
                     <el-card>
-                        {{v.intro  }}
+                        {{v.intro}}
                     </el-card>
                     </el-col>
             </el-row>
@@ -16,22 +16,27 @@
             <div class="info">基本信息</div>
             <el-row :gutter="0" class="rank">
                 <el-col :span="4">
-                    <span><i>{{ v.num_doctor }}</i>个</span>
+                    <span v-if="v.num_doctor!==0"><i>{{ v.num_doctor }}</i>个</span>
+                    <span v-else><i>---- </i>个</span>
                     <span><img src="../../public/博士.png">     博士点</span>
+                    
                 </el-col>
                 <el-col :span="2"></el-col>
                 <el-col :span="4">
-                    <span><i>{{ v.num_master }}</i>个</span>
+                    <span v-if="v.num_master!==0"><i>{{ v.num_master }}</i>个</span>
+                    <span v-else><i>---- </i>个</span>
                     <span><img src="../../public/硕士.png">硕士点</span>
                 </el-col>
                 <el-col :span="2"></el-col>
                 <el-col :span="4">
-                    <span><i>{{v.num_subject}}</i>个</span>
+                    <span v-if="v.num_subject!==0"><i>{{ v.num_subject }}</i>个</span>
+                    <span v-else><i>---- </i>个</span>
                     <span><img src="../../public/国家重点学科.png">国家重点学科</span>
                 </el-col>
                 <el-col :span="2"></el-col>
                 <el-col :span="4">
-                    <span><i>{{v.num_lab}}</i>个</span>
+                    <span v-if="v.num_lab!==0"><i>{{ v.num_lab }}</i>个</span>
+                    <span v-else><i>---- </i>个</span>
                     <span><img src="../../public/国家实验室.png">重点实验室</span>
                 </el-col>   
             </el-row>
@@ -44,7 +49,7 @@
                 <div>
                     <span><img src="../../public/隶属于.png"></span>
                     <span>隶属于:</span>
-                    <span>{{ v.belongsTo}}</span>
+                    <span>{{ v.belongsto}}</span>
                 </div>
                 <div>
                     <span><img src="../../public/占地面积.png"></span>
@@ -54,7 +59,7 @@
                 <div>
                     <span><img src="../../public/学校地址.png"></span>
                     <span>学校地址:</span>
-                    <span>山东省青岛市宁夏路308号</span>
+                    <span>{{v.province}}</span>
                 </div>
             </el-row>
         </div>
@@ -86,8 +91,8 @@ onMounted(()=>{
             school_id:props.school_id
         }
     }).then(data=>{
-        console.log(data.data)
- school_info.arr=data.data
+        // console.log(data.data)
+        school_info.arr=data.data
     })
 })
 
@@ -103,9 +108,6 @@ onMounted(()=>{
 .intro{
     margin-top: 20px;
 }
-/* .intro .el-row .el-col:nth-of-type(1){
-    width: 460px;height: 259px;
-} */
 .intro .el-row .el-col:nth-of-type(1) img{
     width: 460px;height: 259px;border-radius: 15px;
 
@@ -116,7 +118,7 @@ onMounted(()=>{
     overflow: hidden;
 } */
 .intro .el-row .el-col:nth-of-type(2) .el-card{
-    width: 700px;height: 260px;font-size: 16px;overflow: hidden;
+   height: 260px;font-size: 16px;overflow: hidden;
     text-overflow:ellipsis;
 }
 .basicInfo{

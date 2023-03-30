@@ -45,6 +45,7 @@ urlpatterns = [
     path('searchResult',searchResult.as_view()),
     path('searchMajor',searchMajor.as_view()),
     path('singSchoolInfo',singSchoolInfo.as_view()),
+    # path('singSchoolInfo', singSchoolInfo.as_view({'get': 'list'})),
 
 ]
 

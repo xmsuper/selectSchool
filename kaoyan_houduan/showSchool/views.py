@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.forms import model_to_dict
 from django.shortcuts import render,HttpResponse
 # Feature
@@ -11,14 +13,15 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin,ListModelMixin,RetrieveModelMixin,UpdateModelMixin,DestroyModelMixin
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import serializers
+from rest_framework import viewsets
 from rest_framework.views import APIView
+from django.db import connection
 # 以json的格式返回给页面
 from rest_framework.response import Response
 # from showSchool.models import Feature,ProvinceA,ProvinceB,ProvinceOther,SchoolInfo,SchoolType,SchoolScore,SchoolImg
 from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,\
-    Feature,ProvinceA,ProvinceOther,ProvinceB,Province,hotSchoolSearch,userInfo,major\
-    ,school_detail
+    Feature,ProvinceA,ProvinceOther,ProvinceB,Province,Hotsearchschool,Userinfo,Major\
+    ,SchoolDetail
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.db.models import Q
@@ -49,12 +52,12 @@ class searchResult(APIView):
 # 搜索专业信息
 class majorList(serializers.ModelSerializer):
     class Meta:
-        model=major
+        model=Major
         fields='__all__'
 class searchMajor(APIView):
     def post(self,request):
         obj=request.data['params']['keyword']
-        sql=major.objects.filter(major_name__icontains=obj['keyword'])
+        sql=Major.objects.filter(major_name__icontains=obj['keyword'])
         serializer=majorList(instance=sql,many=True)
         return Response(serializer.data)
 
@@ -112,15 +115,15 @@ class allFeature(ListCreateAPIView):
 class hotSchool(serializers.ModelSerializer):
     school_name=allimgSer()
     class Meta:
-        model=hotSchoolSearch
+        model=Hotsearchschool
         fields='__all__'
 class hotSchool(ListCreateAPIView):
-    queryset = hotSchoolSearch.objects.all()
+    queryset = Hotsearchschool.objects.all()
     serializer_class = hotSchool
 
 class RegisterSer(serializers.ModelSerializer):
     class Meta:
-        model=userInfo
+        model=Userinfo
         fields='__all__'
 class Register(APIView):
     # def get(self,request,id):
@@ -136,7 +139,7 @@ class Register(APIView):
             return Response(serializer.errors)
 class LoginSer(serializers.ModelSerializer):
     class Meta:
-        model=userInfo
+        model=Userinfo
         fields='__all__'
 class Login(GenericAPIView):
     serializer_class = LoginSer
@@ -145,7 +148,7 @@ class Login(GenericAPIView):
         obj=request.data['params']
         username=obj['username']
         password=obj['password']
-        result=userInfo.objects.filter(username=username,userPassword=password)
+        result=Userinfo.objects.filter(username=username,userPassword=password)
         if len(result)>0:
             return Response({'content':'成功','code':200})
         else:
@@ -155,44 +158,44 @@ class Login(GenericAPIView):
 # 获取专业型硕士的门类
 class pm_ser(serializers.ModelSerializer):
     class Meta:
-        model=major
+        model=Major
         fields=['level1_name']
 class pm_class(APIView):
     def get(self,request):
-        pm_class=major.objects.filter(major_class='专业型硕士').values('level1_name').distinct()
+        pm_class=Major.objects.filter(major_class='专业型硕士').values('level1_name').distinct()
         serialer=pm_ser(instance=pm_class,many=True)
         return Response(serialer.data)
 class am_ser(serializers.ModelSerializer):
     class Meta:
-        model=major
+        model=Major
         fields=['level1_name']
 class am_class(APIView):
     def get(self,request):
-        pm_class=major.objects.filter(major_class='学术型硕士').values('level1_name').distinct()
+        pm_class=Major.objects.filter(major_class='学术型硕士').values('level1_name').distinct()
         serialer=pm_ser(instance=pm_class,many=True)
         return Response(serialer.data)
 
 class two_class_ser(serializers.ModelSerializer):
     class Meta:
-        model = major
+        model = Major
         fields = ['major_class']
 
 class showTwoClass(APIView):
     def get(self, request):
-        two_class=major.objects.values('major_class').distinct()
+        two_class=Major.objects.values('major_class').distinct()
         serializer=two_class_ser(instance=two_class,many=True)
         return Response(serializer.data)
 
 class majorList_ser(serializers.ModelSerializer):
     class Meta:
-        model=major
+        model=Major
         fields=['level2_name']
 class subject_class(APIView):
     def post(self,request):
         obj=request.data['params']
         match len(obj):
             case 2:
-                major_list=major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name']).values('level2_name').distinct()
+                major_list=Major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name']).values('level2_name').distinct()
                 serializer=majorList_ser(instance=major_list,many=True)
                 return Response(serializer.data)
         return Response()
@@ -200,33 +203,33 @@ class subject_class(APIView):
 # 查专业
 class detail_major(serializers.ModelSerializer):
     class Meta:
-        model=major
+        model=Major
         fields='__all__'
 class detail_major_list(APIView):
     def get(self,request):
-        major_list = major.objects.all()
+        major_list = Major.objects.all()
         serializer = detail_major(instance=major_list, many=True)
         return Response(serializer.data)
     def post(self,request):
         obj=request.data['params']
         match len(obj):
             case 3:
-                major_list=major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name']).filter(level2_name=obj['level2_name'])
+                major_list=Major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name']).filter(level2_name=obj['level2_name'])
                 serializer=detail_major(instance=major_list,many=True)
                 return Response(serializer.data)
             case 2:
-                major_list=major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name'])
+                major_list=Major.objects.filter(major_class=obj['twoClass']).filter(level1_name=obj['level1_name'])
                 serializer=detail_major(instance=major_list,many=True)
                 return Response(serializer.data)
             case 1:
                 if 'twoClass' in obj:
                     print(obj['twoClass'])
-                    major_list = major.objects.filter(major_class=obj['twoClass']).distinct()
+                    major_list = Major.objects.filter(major_class=obj['twoClass']).distinct()
                     serializer = detail_major(instance=major_list, many=True)
                     return Response(serializer.data)
                 if 'level1_name' in obj:
                     print(obj['level1_name'])
-                    major_list = major.objects.filter(level1_name=obj['level1_name'])
+                    major_list = Major.objects.filter(level1_name=obj['level1_name'])
                     serializer = detail_major(instance=major_list, many=True)
                     return Response(serializer.data)
         return Response({'code':'200'})
@@ -323,14 +326,40 @@ class detail_school_list(APIView):
                         return Response(serializer.data)
         return Response({'error':'错误'})
 
+# class allschoolser(serializers.ModelSerializer):
+#     school_name=allimgSer()
+#     class Meta:
+#         model=SchoolInfo
+#         fields=('school_id','type_name','is_985','is_211','type_school_name','syl','province_area','school_img')
+
 class singleSchoolInfo_ser(serializers.ModelSerializer):
+    school_id=allschoolInfoSer()
     class Meta:
-        model=school_detail
+        model=SchoolDetail
         fields='__all__'
+
 class singSchoolInfo(APIView):
     def post(self,request):
         data=request.data['params']['school_id']
         print(data)
-        sql=school_detail.objects.filter(school_id=data)
-        serializer=singleSchoolInfo_ser(instance=sql,many=True)
+        school_list=SchoolDetail.objects.select_related('school_id').filter(school_id=data)
+        serializer=singleSchoolInfo_ser(instance=school_list,many=True)
         return Response(serializer.data)
+        # sql=SchoolDetail.objects.filter(school_id=data)
+        # serializer=singleSchoolInfo_ser(instance=sql,many=True)
+
+        # query=' select a.school_id,a.school_name,b.school_email,a.is_985,a.is_211,a.is_zihuaxian' \
+        #       ',a.province_area,a.province_name,b.belongsTo,b.create_date,b.intro,b.num_doctor,' \
+        #       'b.num_lab,b.num_master,b.num_subject,b.school_space,b.school_site,b.zhaoban_site,' \
+        #       'b.school_phone,b.zhaoban_phone from school_info a left join school_detail b ' \
+        #       'on a.school_id =b.school_id where a.school_id='+str(data)
+        # with connection.cursor() as cursor:
+        #     cursor.execute(query)
+        #     result=cursor.fetchall()
+        #
+        # return JsonResponse(json.dumps(result))
+
+class detail_school_score_ser(serializers.ModelSerializer):
+    class Meta:
+        model=SchoolScore
+        feilds='__all__'

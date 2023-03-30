@@ -21,6 +21,7 @@ const routes = [
   {
     path:'/schoolDetail/:school_id',
     name:'schoolDetail',
+    // redirect:'schoolView',
     component:schoolDetail,
     children:[
       {
