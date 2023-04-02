@@ -21,7 +21,7 @@ from rest_framework.response import Response
 # from showSchool.models import Feature,ProvinceA,ProvinceB,ProvinceOther,SchoolInfo,SchoolType,SchoolScore,SchoolImg
 from showSchool.models import SchoolImg,SchoolInfo,SchoolType,SchoolScore,\
     Feature,ProvinceA,ProvinceOther,ProvinceB,Province,Hotsearchschool,Userinfo,Major\
-    ,SchoolDetail
+    ,SchoolDetail,sylBuild
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from django.db.models import Q
@@ -341,25 +341,75 @@ class singleSchoolInfo_ser(serializers.ModelSerializer):
 class singSchoolInfo(APIView):
     def post(self,request):
         data=request.data['params']['school_id']
-        print(data)
+        # print(data)
         school_list=SchoolDetail.objects.select_related('school_id').filter(school_id=data)
         serializer=singleSchoolInfo_ser(instance=school_list,many=True)
         return Response(serializer.data)
-        # sql=SchoolDetail.objects.filter(school_id=data)
-        # serializer=singleSchoolInfo_ser(instance=sql,many=True)
 
-        # query=' select a.school_id,a.school_name,b.school_email,a.is_985,a.is_211,a.is_zihuaxian' \
-        #       ',a.province_area,a.province_name,b.belongsTo,b.create_date,b.intro,b.num_doctor,' \
-        #       'b.num_lab,b.num_master,b.num_subject,b.school_space,b.school_site,b.zhaoban_site,' \
-        #       'b.school_phone,b.zhaoban_phone from school_info a left join school_detail b ' \
-        #       'on a.school_id =b.school_id where a.school_id='+str(data)
-        # with connection.cursor() as cursor:
-        #     cursor.execute(query)
-        #     result=cursor.fetchall()
-        #
-        # return JsonResponse(json.dumps(result))
+class allSchoolMajor(APIView):
+    def post(self,request):
+        data=request.data['params']['school_id']
+        query="select * from school_score where school_name=(select school_name from school_info where school_id="+str(data)+")"
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            results = cursor.fetchall()
+        data = []
+        for row in results:
+            data.append({
+                'learnType': row[0],
+                'major_code': row[1],
+                'major_name': row[2],
+                'total': row[3],
+                'politics': row[4],
+                'english': row[5],
+                'procourse': row[6],
+                'procourese2': row[7],
+                'remark': row[8],
+            })
+        return Response(data)
 
-class detail_school_score_ser(serializers.ModelSerializer):
+class chooseMajor(APIView):
+    def post(self,request):
+        school_id=request.data['params']['school_id']
+        print(school_id)
+        school_data=request.data['params']['data']
+        print(school_data)
+        if 'major' in  school_data and 'type' in school_data:
+            learnType = school_data['type'].strip()
+            query="select * from school_score where school_name=(select school_name from school_info where school_id="+str(school_id)+") and learnType='"+learnType+"' and major_name='"+school_data['major']+"'"
+        elif 'major' in school_data:
+            query="select * from school_score where school_name=(select school_name from school_info where school_id="+str(school_id)+") and major_name='"+school_data['major']+"'"
+        else:
+            learnType = school_data['type'].strip()
+            query="select * from school_score where school_name=(select school_name from school_info where school_id="+str(school_id)+") and learnType='"+learnType+"'"
+        print(query)
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            results = cursor.fetchall()
+        data = []
+        for row in results:
+            data.append({
+                'learnType': row[0],
+                'major_code': row[1],
+                'major_name': row[2],
+                'total': row[3],
+                'politics': row[4],
+                'english': row[5],
+                'procourse': row[6],
+                'procourese2': row[7],
+                'remark': row[8],
+            })
+        return Response(data)
+
+class syl_ser(serializers.ModelSerializer):
     class Meta:
-        model=SchoolScore
-        feilds='__all__'
+        model=sylBuild
+        fields='__all__'
+class syl_jianshe(APIView):
+    def post(self,request):
+        data=request.data['params']['school_id']
+        print(data)
+        sql=sylBuild.objects.filter(school_id=data)
+        serializer=syl_ser(instance=sql,many=True)
+        return Response(serializer.data)
+

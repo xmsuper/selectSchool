@@ -39,8 +39,8 @@ while i<=107:
             db='graduateschool'
         )
         cursor = conn.cursor()  # 获取到游标对象
-        # sql = 'insert into school_img(school_name,school_img) values("'+list[0]+'","'+list[1]+'")'
-        sql='update school_img set school_img="'+list[1]+'" where school_name="'+list[0]+'"'
+        sql = 'insert into school_img(school_name,school_img) values("'+list[0]+'","'+list[1]+'")'
+        # sql='update school_img set school_img="'+list[1]+'" where school_name="'+list[0]+'"'
         print(sql)
         cursor.execute(sql)
         conn.commit()

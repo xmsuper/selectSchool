@@ -9,7 +9,8 @@ const getAndCommit=async (url,mutationName,commit,method)=>{
 const store=createStore({
   state: {
     loading:false,
-    isLogin:false
+    isLogin:false,
+    
   },
   getters: {
   },

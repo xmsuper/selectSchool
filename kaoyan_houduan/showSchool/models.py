@@ -177,3 +177,10 @@ class SchoolDetail(models.Model):
     class Meta:
         managed = True
         db_table = 'school_detail'
+
+class sylBuild(models.Model):
+    school_id=models.IntegerField(primary_key=True)
+    syl_jianshe=models.TextField()
+    class Meta:
+        managed=True
+        db_table='syl_build'

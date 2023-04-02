@@ -7,6 +7,8 @@ import searchResult from '@/views/searchResult.vue'
 import schoolDetail from '@/views/schoolDetail.vue'
 import schoolView from '@/components/schoolView.vue'
 import reexamine from '@/components/reexamine.vue'
+import zhaoshengxinxi from '@/components/zhaoshengxinxi.vue'
+import community from '@/components/community.vue'
 const routes = [
   {
     path:'/home',
@@ -35,6 +37,16 @@ const routes = [
         name:'reexamine',
         component:reexamine,
         props:true
+      },
+      {
+        path:'zhaoshengxinxi',
+        name:'zhaoshengxinxi',
+        component:zhaoshengxinxi,
+      },
+      {
+        path:'community',
+        name:'community',
+        component:community,
       }
     ]
   },

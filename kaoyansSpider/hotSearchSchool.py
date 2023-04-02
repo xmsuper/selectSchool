@@ -20,7 +20,7 @@ for i in hotSearch:
         db='graduateschool'
     )
     cursor = conn.cursor()  # 获取到游标对象
-    sql='insert into hotsearchschool(school_id,school_name) values ("'+str(i['school_id'])+'","'+str(i['school_name'])+'")'
+    sql='insert into hotsearchschool(school_id,school_name_id) values ("'+str(i['school_id'])+'","'+str(i['school_name'])+'")'
     print(sql)
     cursor.execute(sql)
     conn.commit()
