@@ -1,0 +1,1 @@
+https://static.kaoyan.cn/json/query/query_gjx_score.json  get
