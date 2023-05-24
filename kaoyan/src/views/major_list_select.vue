@@ -53,7 +53,7 @@
 <script setup>
 import {ref,reactive,onMounted,computed,watch} from 'vue';
 import { useRoute,useRouter } from 'vue-router';
-import requestFn from '@/api/requestFn';
+import requestFn from '@/api/requestFn.js';
 const router=useRouter()
 const route=useRoute()
 const recommend_school=reactive({item:[]})

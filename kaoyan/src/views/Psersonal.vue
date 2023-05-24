@@ -96,9 +96,9 @@ import avator from '@/components/avator.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Unlock } from "@element-plus/icons-vue"
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
-import requestFn from '@/api/requestFn';
+import requestFn from '@/api/requestFn.js';
 import { ElMessage } from 'element-plus'
-import store from '@/store';
+import store from '@/store/index.js';
 
 const isNUll = ref(true)
 const tabPosition = ref('left')

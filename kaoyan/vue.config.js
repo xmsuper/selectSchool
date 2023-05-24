@@ -12,7 +12,8 @@ module.exports = defineConfig({
         // pathRewrite方法重写url
         pathRewrite:{
           // '^api':'/'重写之后url为http://127.0.0.1:8080/xxx
-          '^/api':'http://127.0.0.1:8080/'
+          // '^/api':'http://127.0.0.1:8080/'
+          '/api':''
         }
       }
     }

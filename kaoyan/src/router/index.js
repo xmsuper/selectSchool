@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory, useRoute, useRouter } from 'vue-router'
-import App from '@/App.vue'
+// import App from '@/App.vue'
 import home from '@/views/home.vue'
 import indexSchoolVue from '@/views/indexSchool.vue'
-import major_list from '@/views/major_list'
+import major_list from '@/views/major_list.vue'
 import searchResult from '@/views/searchResult.vue'
 import schoolDetail from '@/views/schoolDetail.vue'
 import schoolView from '@/components/schoolView.vue'
@@ -15,8 +15,8 @@ import personal from '@/views/Psersonal.vue'
 import bigScreen from '@/views/bigScreen.vue'
 import tools from '@/views/tools.vue'
 import articleMain from '@/components/articleMain.vue'
-import major_list_select from '@/views/major_list_select'
-import zuoti from '@/views/zuoti'
+import major_list_select from '@/views/major_list_select.vue'
+import zuoti from '@/views/zuoti.vue'
 const routes = [
   {
     path: '/home',

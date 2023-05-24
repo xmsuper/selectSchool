@@ -111,8 +111,8 @@
 <script setup>
 import { ref, reactive, watch, computed, nextTick, onMounted, toRaw, provide } from "vue"
 import { useRoute, useRouter } from 'vue-router'
-import requestFn from "@/api/requestFn";
-import store from "@/store";
+import requestFn from "@/api/requestFn.js";
+import store from "@/store/index.js";
 const isLogin = store.state.isLogin
 const route = useRoute()
 const school_id = route.params

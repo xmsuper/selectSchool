@@ -88,8 +88,8 @@
 
 <script setup>
 import { ref,reactive,nextTick,computed,watch,onMounted,onUpdated} from "vue" 
-import requestFn from "@/api/requestFn"
-import store from "@/store"
+import requestFn from "@/api/requestFn.js"
+import store from "@/store/index.js"
 import {useRoute,useRouter} from 'vue-router'
 import { ElMessage } from 'element-plus'
 const router=useRouter()

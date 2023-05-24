@@ -272,7 +272,7 @@
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
 import chooseMajor from "@/components/chooseMajor.vue";
 import hotSearch from "@/components/hotSearch.vue";
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from 'element-plus'
 

@@ -62,9 +62,9 @@
 <script setup>
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
 import { Plus } from '@element-plus/icons-vue'
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 import axios from "axios";
-import store from "@/store";
+import store from "@/store/index.js";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from 'element-plus'
 

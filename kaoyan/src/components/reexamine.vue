@@ -61,7 +61,7 @@
 <script setup>
 import { ArrowDown } from '@element-plus/icons-vue'
 import { ref, reactive, onMounted, watch } from 'vue'
-import requestFn from '@/api/requestFn';
+import requestFn from '@/api/requestFn.js';
 import { useRoute, useRouter } from 'vue-router';
 const schoolType = ref('全部')
 const schoolMajor = ref('全部')

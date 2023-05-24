@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 import { inject,ref,reactive,nextTick,computed,watch,onMounted,onUpdated,toRaw} from "vue" 
 import { useRoute,useRouter } from "vue-router";
 const school_info=reactive({arr:[]})// 接受父路由的参数

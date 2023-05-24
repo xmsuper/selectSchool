@@ -42,7 +42,7 @@
 <script setup>
 import { ref, reactive, onMounted, watch, toRaw } from 'vue';
 import bigScreen from './bigScreen.vue';
-import router from '@/router';
+import router from '@/router/index.js';
 
 
 const slogan = reactive({

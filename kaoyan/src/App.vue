@@ -8,7 +8,7 @@
 import home from '@/views/home.vue'
 import { computed, onMounted } from 'vue';
 import navHeader from './components/navHeader.vue';
-import store from './store';
+import store from './store/index.js';
 import Loader from './components/Loader.vue';
 
 //此时是flase

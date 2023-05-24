@@ -32,7 +32,7 @@
 
 
 <script setup>
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute()

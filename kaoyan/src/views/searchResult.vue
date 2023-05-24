@@ -71,7 +71,7 @@
 import navHeader from "@/components/navHeader.vue";
 import { ref, reactive, onMounted, watch, nextTick } from "vue"
 import { useRoute, useRouter } from 'vue-router'
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 const route = useRoute()
 const router = useRouter()
 const kw = route.query

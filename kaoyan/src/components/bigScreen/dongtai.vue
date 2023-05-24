@@ -7,7 +7,7 @@
 <script setup>
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
 import * as echarts from 'echarts';
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 
 
 const total_zhexue=reactive({item:[]})

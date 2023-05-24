@@ -63,7 +63,7 @@ import top10 from "@/components/bigScreen/top10.vue";
 import schoolDistributed from "@/components/bigScreen/schoolDistributed.vue";
 import hotMajor from "@/components/bigScreen/hotMajor.vue";
 import dongtai from "@/components/bigScreen/dongtai.vue";
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 
 const img_url=ref('')
 onMounted(()=>{

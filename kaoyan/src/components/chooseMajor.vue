@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 const allbtn = ref(true)
 const twoClass = reactive({ arr: [] })
 const level1_name = reactive({ arr: [] })

@@ -5,7 +5,7 @@
 <script>
 import * as echarts from 'echarts';
 import china from '@/assets/map/china.js'
-import requestFn from '@/api/requestFn';
+import requestFn from '@/api/requestFn.js';
 export default {
     name: '',
     components: {},

@@ -8,7 +8,7 @@
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
 
 import * as echarts from 'echarts';
-import requestFn from '@/api/requestFn'
+import requestFn from '@/api/requestFn.js'
 const newArray = []
 
 var option;

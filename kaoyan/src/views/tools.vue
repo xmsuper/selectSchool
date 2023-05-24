@@ -69,7 +69,7 @@
 <script setup>
 import { ref, reactive, nextTick, computed, watch, onMounted, onUpdated } from "vue"
 import chooseMajor from "@/components/chooseMajor.vue";
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 const countryLine = reactive({ item: [] })
 const newCountryLine = reactive({ item: [] })
 const newArray = reactive({ item: [] })

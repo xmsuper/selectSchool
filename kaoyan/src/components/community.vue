@@ -83,9 +83,9 @@ import { ref, onBeforeUnmount, shallowRef, reactive, nextTick, computed, watch, 
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { DomEditor } from '@wangeditor/editor'
-import requestFn from "@/api/requestFn"
-import store from "@/store"
-import router from "@/router"
+import requestFn from "@/api/requestFn.js"
+import store from "@/store/index.js"
+import router from "@/router/index.js"
 import { ElMessage } from 'element-plus'
 const centerDialogVisible = ref(false)
 const isShowComment = ref(false)

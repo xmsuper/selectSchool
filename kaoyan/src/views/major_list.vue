@@ -75,9 +75,9 @@
 
 <script setup>
 import { ref, reactive, onMounted, nextTick,computed,watch } from "vue"
-import requestFn from "@/api/requestFn";
+import requestFn from "@/api/requestFn.js";
 import hotSearch from "@/components/hotSearch.vue";
-import router from "@/router";
+import router from "@/router/index.js";
 const allbtn = ref(true)
 const twoClass = reactive({ arr: [] })
 const level1_name = reactive({ arr: [] })

@@ -15,7 +15,7 @@ import { watch, toRaw, onMounted, reactive, ref } from 'vue';
 import schoolLocation from '@/components/schoolLocation.vue'
 import indexSchool from '@/components/indexSchool.vue'
 import hotSearch from '@/components/hotSearch.vue'
-import store from '@/store'
+import store from '@/store/index.js'
 const chooseCondition = reactive({
   Location: '',
   SchoolType: '',
